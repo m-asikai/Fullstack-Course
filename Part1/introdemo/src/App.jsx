@@ -37,8 +37,11 @@ const App = () => {
     setTotal(left + right)
   }
 
+// AA
+
   return (
     <div>
+
       {left}
       <Button onClick={handleLeftClick} text='left' />
       <Button onClick={handleRightClick} text='right' />
