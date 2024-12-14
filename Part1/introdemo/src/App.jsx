@@ -37,8 +37,9 @@ const App = () => {
     setTotal(left + right)
   }
 
-
   
+
+
   return (
     <div>
 
