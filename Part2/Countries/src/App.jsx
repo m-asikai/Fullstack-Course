@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import Filter from './Components/Filter';
+
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [filter, setFilter] = useState('');
@@ -41,35 +43,7 @@ const App = () => {
         })()}
       </div>
       <div>
-        {(() => {
-          if (filteredCountries.length > 10) {
-            return <p>Too many matches.</p>
-          }
-          else if (filteredCountries.length < 10 && filteredCountries.length > 1) {
-            return filteredCountries.map(country => 
-              <p key={country.name.common}>
-                {country.name.common}
-              </p>
-            );
-          }
-          else if (filteredCountries.length === 1) {
-            const country = filteredCountries[0];
-            console.log(country);
-            return (
-              <div>
-                <h2>{country.name.common}</h2>
-                <p>{country.capital}</p>
-                <p>{country.population}</p>
-                <ul>
-                  {   
-                    Object.values(country.languages).map(lang => <li key={lang}>{lang}</li>)
-                  }
-                </ul>
-                <img src={`${country.flags.png}`}></img>
-              </div>
-            )
-          }
-        })()}
+        <Filter filteredCountries={filteredCountries} />
       </div>
     </div>
   )
