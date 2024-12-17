@@ -23,12 +23,11 @@ const App = () => {
     const filtered = countries.filter(country => 
       country.name.common
       .toLowerCase()
-      .startsWith(input.toLowerCase())
+      .includes(input.toLowerCase())
     );
     setFilteredCountries(filtered);
   }
 
- 
 
   return (
     <div>
@@ -38,12 +37,7 @@ const App = () => {
         </div>
       </form>
       <div>
-        {(() => {
-          console.log("a")
-        })()}
-      </div>
-      <div>
-        <Filter filteredCountries={filteredCountries} />
+        <Filter filteredCountries={filteredCountries}/>
       </div>
     </div>
   )

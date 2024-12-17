@@ -11,17 +11,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [newFilter, setFilter] = useState('');
   const [personsToShow, setPersonsToShow] = useState(persons);
-
-  useEffect(() => {
-    axios
-        .get('http://localhost:3001/persons')
-        .then(response => {
-          setPersons(response.data);
-          setPersonsToShow(response.data);
-        })
-  }, []);
   const [notification, setNotificationMessage] = useState(null);
   const [messageType, setMessageType] = useState('notification');
+
 
   useEffect(() => {
     personService
