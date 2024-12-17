@@ -1,12 +1,15 @@
-const Shower = ({ personsToShow }) => {
+const Shower = ({ personsToShow, handleDelete }) => {
     return (
         <div>
         {
           personsToShow.map(person => {
             return (
-              <p key={person.id}>
-                {person.name} {person.number}
-              </p>
+              <div key={person.id}>
+                <p>
+                  {person.name} {person.number}
+                </p>
+                <button onClick={() => handleDelete(person.id)}>Delete</button>
+              </div>
             )
           })
         }
