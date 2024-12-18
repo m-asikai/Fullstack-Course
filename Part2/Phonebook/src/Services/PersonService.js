@@ -17,12 +17,12 @@ const save = person => {
 }
 
 const deletePerson = id => {
-    const req = axios.delete(RENDER_URL + BASE_URL`${id}`);
+    const req = axios.delete(`${RENDER_URL}${BASE_URL}${id}`);
     return req;
 }
 
 const update = person => {
-    const req = axios.put(RENDER_URL + BASE_URL`${person.id}`, person);
+    const req = axios.put(`${RENDER_URL}${BASE_URL}${person.id}`, person);
     return req;
 }
 

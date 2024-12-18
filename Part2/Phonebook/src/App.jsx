@@ -98,6 +98,7 @@ const App = () => {
   }
 
   const handleDelete = id => {
+    console.log(persons);
     if (window.confirm(`Are you sure you want to delete ${persons[id - 1].name}?`))
       personService
         .deletePerson(id)
