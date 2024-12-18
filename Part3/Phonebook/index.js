@@ -1,6 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
+require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -46,7 +48,9 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons/', (request, response) => {
-  response.json(persons);
+  Person.find({}).then(persons => {
+    response.json(persons);
+  });
 })
 
 app.get('/api/info/', (request, response) => {
@@ -105,3 +109,56 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+
+// Mongo -------
+
+
+const password = process.argv[2];
+const name = process.argv[3];
+const number = process.argv[4];
+
+
+const url = process.env.MONGODB_URI;
+mongoose.set('strictQuery',false)
+mongoose.connect(url);
+
+
+const personSchema = new mongoose.Schema({
+id: Number,
+name: String,
+number: String,
+})
+
+personSchema.set('toJSON', {
+  transform: (doc, returnedObj) => {
+    returnedObj.id = returnedObj._id.toString();
+    delete returnedObj._id;
+    delete returnedObj.__v;
+  }
+})
+
+const Person = mongoose.model('Person', personSchema)
+
+// const person = new Person({
+// id: Math.floor(Math.random() * 100_000),
+// name: name || "Default name",
+// number: number || "123 456 789"
+// })
+
+
+// if (name && number) {
+//   person.save().then(res => {
+//     console.log(res);
+//     mongoose.connection.close();
+//   });
+// }
+// else {
+//   Person.find({}).then(res => {
+//     console.log('Phonebook: ')
+//     res.forEach(person => {
+//       console.log(person);
+//     })
+//   mongoose.connection.close();
+//   });
+// }
