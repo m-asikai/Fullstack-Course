@@ -7,6 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.static('dist'));
+const Person = require('./Model/phonebook');
 
 morgan.token('body', (req, res) => {
   if (req.method === 'POST'){
@@ -16,31 +17,6 @@ morgan.token('body', (req, res) => {
 })
 
 app.use(morgan(':body'));
-
-let persons = [
-  { 
-    "id": "1",
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": "2",
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": "3",
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": "4",
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-]
-
-
 
 
 app.get('/', (request, response) => {
@@ -62,20 +38,34 @@ app.get('/api/info/', (request, response) => {
   response.send(html);
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
-  const person = persons.find(person => person.id === id)
-  if (person){
-    return response.json(person);
-  }
-  response.status(404).end();
+  Person.findById(id).then(person => {
+    if (person){
+      response.json(person);
+    }
+    else {
+      response.status(404).end();
+    }
+  }).catch(e => {
+    next(e);
+  })
 })
 
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   const id = req.params.id;
-  persons = persons.filter(person => person.id !== id);
-  res.status(204).end();
+  Person.findByIdAndDelete(id)
+    .then(result => {
+      if (result){
+        res.status(204).end();
+      } 
+      else {
+        res.status(404).send({error: 'Person not found.'});
+      }
+    }).catch(e => {
+      next(e);
+    })
 })
 
 app.post('/api/persons/', (request, response) => {
@@ -94,15 +84,31 @@ app.post('/api/persons/', (request, response) => {
     })
   }
 
-  const id = persons.length + 1;
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  });
+
+  person.save().then(person => {
+    response.json(person);
+  })
+})
+
+app.put('/api/persons/:id', (req, res, next) => {
+  console.log('UPDATE');
+  const body = req.body
+
   const person = {
-    id: id,
     name: body.name,
     number: body.number,
   }
 
-  persons = persons.concat(person);
-  response.json(person);
+  Person.findByIdAndUpdate(req.params.id, person, {new: true})
+    .then(p => {
+      res.json(p);
+    })
+    .catch(e => next(e))
+
 })
 
 const PORT = process.env.PORT || 3001;
@@ -111,54 +117,12 @@ app.listen(PORT, () => {
 })
 
 
-// Mongo -------
-
-
-const password = process.argv[2];
-const name = process.argv[3];
-const number = process.argv[4];
-
-
-const url = process.env.MONGODB_URI;
-mongoose.set('strictQuery',false)
-mongoose.connect(url);
-
-
-const personSchema = new mongoose.Schema({
-id: Number,
-name: String,
-number: String,
-})
-
-personSchema.set('toJSON', {
-  transform: (doc, returnedObj) => {
-    returnedObj.id = returnedObj._id.toString();
-    delete returnedObj._id;
-    delete returnedObj.__v;
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message);
+  if(error.name === 'CastError') {
+    return res.status(400).send({ error: 'Malformatted id.'});
   }
-})
+  next(error);
+}
 
-const Person = mongoose.model('Person', personSchema)
-
-// const person = new Person({
-// id: Math.floor(Math.random() * 100_000),
-// name: name || "Default name",
-// number: number || "123 456 789"
-// })
-
-
-// if (name && number) {
-//   person.save().then(res => {
-//     console.log(res);
-//     mongoose.connection.close();
-//   });
-// }
-// else {
-//   Person.find({}).then(res => {
-//     console.log('Phonebook: ')
-//     res.forEach(person => {
-//       console.log(person);
-//     })
-//   mongoose.connection.close();
-//   });
-// }
+app.use(errorHandler);
