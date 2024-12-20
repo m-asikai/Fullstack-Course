@@ -63,26 +63,31 @@ const App = () => {
       const newPerson = {
         name: newName,
         number: newNumber,
-        id: `${persons.length + 1}`
       }
       const entries = persons.concat(newPerson)
       personService
         .save(newPerson)
         .then(res => {
-          console.log(res);
+          setPersons(entries);
+          const filtered = entries.filter(person => 
+            person.name
+            .toLowerCase()
+            .startsWith(newFilter.toLowerCase())
+          );
+          setPersonsToShow(filtered);
+          setMessageType('notification')
+          setNotificationMessage(`${newPerson.name} added successfully.`)
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 2000);
         })
-      setPersons(entries);
-      const filtered = entries.filter(person => 
-        person.name
-        .toLowerCase()
-        .startsWith(newFilter.toLowerCase())
-      );
-      setPersonsToShow(filtered);
-      setMessageType('notification')
-      setNotificationMessage(`${newPerson.name} added successfully.`)
-      setTimeout(() => {
-        setNotificationMessage(null);
-      }, 2000);
+        .catch(e => {
+          setMessageType('error');
+          setNotificationMessage(e.response.data.error);
+          setTimeout(() => {
+            setNotificationMessage(null);
+            }, 2000);
+        });
     }
   }
 
@@ -98,8 +103,8 @@ const App = () => {
   }
 
   const handleDelete = id => {
-    console.log(persons);
-    if (window.confirm(`Are you sure you want to delete ${persons[id - 1].name}?`))
+    const personToDelete = persons.find(person => person.id === id);
+    if (window.confirm(`Are you sure you want to delete ${personToDelete.name}?`))
       personService
         .deletePerson(id)
         .then(res => {

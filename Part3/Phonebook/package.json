@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "test": "echo \\ \"Error: no test specified\\\" && exit 1",
     "full-build": "powershell -Command \"Remove-Item -Path '../../Part2/Phonebook/dist' -Recurse -Force; cd ../../Part2/Phonebook; npm run build; Copy-Item -Path 'dist' -Destination '../../Part3/Phonebook' -Recurse -Force\"", 
-    "deploy": "npm run full-build && git add . && git commit -m uibuild && git push"
+    "deploy": "npm run full-build && git add . && git commit -m uibuild && git push",
+    "lint": "eslint ."
   },
   "author": "M",
   "license": "ISC",
