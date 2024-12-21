@@ -118,7 +118,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div style={{textAlign: 'center'}}>
       <h2>Phonebook</h2>
       <Filter handleFilter={handleFilter} />
       <Notification message={notification} type={messageType}/>
