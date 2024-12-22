@@ -5,6 +5,7 @@ const config = require('./utils/config');
 const cors = require('cors');
 const middleware = require('./utils/middleware');
 const mongoose = require('mongoose');
+require('express-async-errors');
 
 const mongoUrl = config.MONGODB_URI
 mongoose.connect(mongoUrl)
