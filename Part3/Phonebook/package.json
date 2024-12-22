@@ -6,17 +6,26 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \\ \"Error: no test specified\\\" && exit 1"
+    "test": "echo \\ \"Error: no test specified\\\" && exit 1",
+    "full-build": "powershell -Command \"Remove-Item -Path '../../Part2/Phonebook/dist' -Recurse -Force; cd ../../Part2/Phonebook; npm run build; Copy-Item -Path 'dist' -Destination '../../Part3/Phonebook' -Recurse -Force\"", 
+    "deploy": "npm run full-build && git add . && git commit -m uibuild && git push",
+    "lint": "eslint ."
   },
   "author": "M",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "morgan": "^1.10.0",
+    "axios": "^1.7.9",
     "mongoose": "^8.9.1",
     "dotenv": "^16.4.7"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "@eslint/js": "^9.17.0",
+    "@stylistic/eslint-plugin-js": "^2.12.1",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0"
   }
 }
