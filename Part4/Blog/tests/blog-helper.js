@@ -1,3 +1,5 @@
+const User = require('../models/user');
+
 const blogs = [
     {
         title: "Tapsan seikkailut",
@@ -13,7 +15,14 @@ const blogs = [
     },
 ]
 
+const getUsers = async () => {
+    const users = await User.find({}).populate('blogs');
+    return users;
+}
+
+
 
 module.exports = {
     blogs,
+    getUsers,
 }
