@@ -64,8 +64,15 @@ const App = () => {
   const addBlog = async (entry) => {
     try {
       const postedBlog = await blogService.create(entry)
+      postedBlog.user = {
+        id: postedBlog.user,
+        name: user.name,
+        username: user.username
+      }
       formRef.current.toggleVisibility()
-      setBlogs(blogs.concat(postedBlog))
+      const updatedBlogs = blogs.concat(postedBlog)
+      updatedBlogs.sort((a, b) => b.likes - a.likes)
+      setBlogs(updatedBlogs)
       setAddMessage({
         title: postedBlog.title,
         author: postedBlog.author

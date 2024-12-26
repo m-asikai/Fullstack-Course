@@ -1,6 +1,6 @@
 const LoginForm = ({ handleLogin, username, password, handleUsername, handlePassword }) => {
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} data-testid='login-form'>
       <div>
                 Username
         <input style={{ margin: 8 }}

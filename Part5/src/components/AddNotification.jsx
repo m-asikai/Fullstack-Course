@@ -1,5 +1,4 @@
 const AddNotification = ({ title, author }) => {
-  console.log(title, author)
   if (!title || !author){
     return null
   }

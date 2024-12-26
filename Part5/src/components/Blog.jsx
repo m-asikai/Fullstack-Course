@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 const Blog = ({ blog, handleLike, handleDelete, user }) => {
   const [showDetail, setShowDetail] = useState(false)
+  //console.log(blog.user.username, ' ', user.username, ' ', blog.title)
 
   const visible = { 'display': showDetail ? '' : 'None' }
 
@@ -26,7 +27,7 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
       user: blog.user ? blog.user.id : null
     }
     handleLike(newBlog)
-    blog.likes ++
+    blog.likes++
   }
 
   const remove = () => {
@@ -34,7 +35,7 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
   }
 
   return (
-    <div style={style}>
+    <div style={style} className='blog'>
       <div>
         {blog.title} {blog.author}
         <button style={{ 'margin': 4 }}
@@ -54,7 +55,7 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
         </div>
         <button onClick={addLike}>Like</button>
         <div style={{
-          'display': user.username === blog.user.username ? '' : 'None',
+          'display': user && user.username === blog.user.username ? '' : 'None',
           'margin': 8,
         }}>
           <button onClick={remove}>Delete</button>
@@ -68,7 +69,6 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   handleLike: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
 }
 
 export default Blog

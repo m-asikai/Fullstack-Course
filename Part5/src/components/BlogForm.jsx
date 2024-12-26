@@ -35,7 +35,6 @@ const BlogForm = ({ addBlog }) => {
   }
 
   const create = (e) => {
-    console.log(e, entry)
     e.preventDefault()
     addBlog(entry)
     setEntry({
@@ -54,6 +53,7 @@ const BlogForm = ({ addBlog }) => {
           <input style={{ margin: 8 }}
             value={entry.title}
             onChange={handleTitle}
+            data-testid="title-input"
           />
         </div>
         <div >
@@ -61,6 +61,7 @@ const BlogForm = ({ addBlog }) => {
           <input style={{ margin: 8 }}
             value={entry.author}
             onChange={handleAuthor}
+            data-testid="author-input"
           />
         </div>
         <div >
@@ -68,6 +69,7 @@ const BlogForm = ({ addBlog }) => {
           <input style={{ margin: 8 }}
             value={entry.url}
             onChange={handleUrl}
+            data-testid="url-input"
           />
         </div>
         <div >
@@ -75,6 +77,7 @@ const BlogForm = ({ addBlog }) => {
           <input style={{ margin: 8 }}
             value={entry.likes}
             onChange={handleLikes}
+            data-testid="likes-input"
           />
         </div>
         <button type="submit">Add blog</button>
