@@ -1,28 +1,74 @@
-const Blog = ({ blogs }) => {
-  // <div style={{fontSize : 24}}>
-  //   {blog.author} : {blog.title}
-  // </div>  
+import { useState } from 'react'
+import PropTypes from 'prop-types'
+
+const Blog = ({ blog, handleLike, handleDelete, user }) => {
+  const [showDetail, setShowDetail] = useState(false)
+
+  const visible = { 'display': showDetail ? '' : 'None' }
+
+  const buttonText = !showDetail ? 'View' : 'Hide'
+  const style = {
+    border: 'solid',
+    borderWidth: 1,
+    padding: 4,
+    width: 'fit-content',
+    margin: 'auto',
+    marginBottom: 4,
+  }
+
+  const addLike = () => {
+    const newBlog = {
+      id: blog.id,
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: Number (blog.likes + 1),
+      user: blog.user ? blog.user.id : null
+    }
+    handleLike(newBlog)
+    blog.likes ++
+  }
+
+  const remove = () => {
+    handleDelete(blog)
+  }
+
   return (
-    <table style={{
-      margin: 'auto',
-      fontSize: 24,
-      }}>
-      <thead>
-        <tr>
-          <th>Author</th><th>Title</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          blogs.map(blog => {
-            return <tr key={blog.id}  style={{fontSize: 16}}>
-              <td>{blog.author}</td><td>{blog.title}</td>
-            </tr>
-          })
-        }
-      </tbody>
-    </table>
+    <div style={style}>
+      <div>
+        {blog.title} {blog.author}
+        <button style={{ 'margin': 4 }}
+          onClick={() => setShowDetail(!showDetail)}>
+          {buttonText}
+        </button>
+      </div>
+      <div style={visible}>
+        <div>
+          URL: {blog.url}
+        </div>
+        <div>
+          Likes: {blog.likes}
+        </div>
+        <div>
+          Added by: {blog.user.username}
+        </div>
+        <button onClick={addLike}>Like</button>
+        <div style={{
+          'display': user.username === blog.user.username ? '' : 'None',
+          'margin': 8,
+        }}>
+          <button onClick={remove}>Delete</button>
+        </div>
+      </div>
+    </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 export default Blog

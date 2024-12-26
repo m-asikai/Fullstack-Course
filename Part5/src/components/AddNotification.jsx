@@ -1,25 +1,25 @@
-const AddNotification = ({title, author}) => {
-    console.log(title, author)
-    if (!title || !author){
-        return null;
-    }
-    const notificationStyle = {
-        color: 'green',
-        fontSize: 24,
-        border: '3px solid green',
-        borderRadius: 4,
-        backgroundColor: 'lightblue',
-        textAlign: 'center',
-        margin: 'auto',
-        marginTop: 8,
-        padding: 8,
-        width: 'fit-content'
-    }
-    return (
-        <p style={notificationStyle}>
+const AddNotification = ({ title, author }) => {
+  console.log(title, author)
+  if (!title || !author){
+    return null
+  }
+  const notificationStyle = {
+    color: 'green',
+    fontSize: 24,
+    border: '3px solid green',
+    borderRadius: 4,
+    backgroundColor: 'lightblue',
+    textAlign: 'center',
+    margin: 'auto',
+    marginTop: 8,
+    padding: 8,
+    width: 'fit-content'
+  }
+  return (
+    <p style={notificationStyle}>
             New blog created: {title} by {author}.
-        </p>
-    )
+    </p>
+  )
 }
 
-export default AddNotification;
+export default AddNotification
