@@ -1,20 +1,24 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { createVote } from './reducers/anecdoteReducer'
+import { useDispatch } from 'react-redux'
 import AnecdoteForm from './components/AnecdoteForm'
 import AnecdoteList from './components/AnecdoteList'
+import Filter from './components/Filter'
+import Notification from './components/Notification'
+import { useEffect } from 'react'
+import { getAnecdotes } from './reducers/anecdoteReducer'
+
 
 const App = () => {
-  // const anecdotes = useSelector(state => state)
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-  // const vote = (id) => {
-  //   console.log('vote', id)
-  //   dispatch(createVote(id))
-  // }
+  useEffect(() => {
+    dispatch(getAnecdotes())
+  })
 
   return (
-    <div>
+    <div style={{'textAlign': 'center'}}>
       <h2>Anecdotes</h2>
+      <Notification />
+      <Filter />
       <AnecdoteList />
       <AnecdoteForm />
     </div>
