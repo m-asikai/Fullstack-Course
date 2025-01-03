@@ -15,12 +15,6 @@ const SingleUserView = () => {
             return <li key={blog.id}>{blog.title}</li>;
           })}
         </ul>
-        <div>
-          <Link to="/">Home</Link>
-        </div>
-        <div>
-          <Link to="/users">Users</Link>
-        </div>
       </div>
     </div>
   );

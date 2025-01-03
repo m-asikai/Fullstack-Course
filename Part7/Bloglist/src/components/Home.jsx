@@ -15,8 +15,6 @@ import {
 import { createNewBlog, getBlogs } from "../reducers/blogReducer";
 import BlogList from "./BlogList";
 import { setUser } from "../reducers/userReducer";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import UserList from "./UserList";
 
 const Home = () => {
   const [username, setUsername] = useState("");
@@ -35,6 +33,7 @@ const Home = () => {
     if (logged) {
       const user = JSON.parse(logged);
       dispatch(setUser(user));
+      blogService.setToken(user.token);
     }
   }, []);
 
@@ -92,17 +91,9 @@ const Home = () => {
     }
   };
 
-  const handleLogOut = () => {
-    dispatch(setUser(null));
-    window.localStorage.removeItem("user");
-  };
-
   return (
     <div style={{ textAlign: "center" }}>
       <h2 style={{ fontSize: 32 }}>Blogs</h2>
-      <div>
-        <Link to="/users">Users</Link>
-      </div>
       <BlogList user={user} />
       <AddNotification />
       {!user && (
@@ -120,12 +111,6 @@ const Home = () => {
         </Togglable>
       )}
       <ErrorNotification />
-      {user && (
-        <div>
-          <p>Logged in as {user.username}</p>
-          <button onClick={handleLogOut}>Logout</button>
-        </div>
-      )}
     </div>
   );
 };

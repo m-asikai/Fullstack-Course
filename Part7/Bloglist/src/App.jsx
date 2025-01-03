@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import userService from "./services/users";
 import { getBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
@@ -7,10 +7,12 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import UserList from "./components/UserList";
 import Home from "./components/Home";
 import SingleUserView from "./components/SingleUserView";
+import Blog from "./components/Blog";
 
 const App = () => {
   const [users, setUsers] = useState([]);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getBlogs());
@@ -32,12 +34,34 @@ const App = () => {
     getUserInfo();
   }, []);
 
+  const handleLogOut = () => {
+    dispatch(setUser(null));
+    window.localStorage.removeItem("user");
+  };
+
   return (
     <Router>
+      <div style={{ textAlign: "center" }}>
+        {user && (
+          <div>
+            <p>Logged in as {user.username}</p>
+            <button onClick={handleLogOut}>Logout</button>
+          </div>
+        )}
+        <div>
+          <Link to="/" style={{ padding: 4 }}>
+            Home
+          </Link>
+          <Link to="/users" style={{ padding: 4 }}>
+            Users
+          </Link>
+        </div>
+      </div>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/users" element={<UserList users={users} />} />
         <Route path="/users/:id" element={<SingleUserView />} />
+        <Route path="/blog/:id" element={<Blog />} />
       </Routes>
     </Router>
   );
