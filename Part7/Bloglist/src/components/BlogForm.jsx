@@ -1,89 +1,98 @@
-import { useState } from 'react'
-
+import { useState } from "react";
+import { Button } from "react-bootstrap";
 
 const BlogForm = ({ addBlog }) => {
-
   const [entry, setEntry] = useState({
-    title: '',
-    author: '',
-    url: '',
-    likes: ''
-  })
+    title: "",
+    author: "",
+    url: "",
+    likes: "",
+  });
 
   const handleTitle = ({ target }) => {
     setEntry({
-      ...entry, title: target.value
-    })
-  }
+      ...entry,
+      title: target.value,
+    });
+  };
 
   const handleAuthor = ({ target }) => {
     setEntry({
-      ...entry, author: target.value
-    })
-  }
+      ...entry,
+      author: target.value,
+    });
+  };
 
   const handleUrl = ({ target }) => {
     setEntry({
-      ...entry, url: target.value
-    })
-  }
+      ...entry,
+      url: target.value,
+    });
+  };
 
   const handleLikes = ({ target }) => {
     setEntry({
-      ...entry, likes: Number (target.value)
-    })
-  }
+      ...entry,
+      likes: Number(target.value),
+    });
+  };
 
   const create = (e) => {
-    e.preventDefault()
-    addBlog(entry)
+    e.preventDefault();
+    addBlog(entry);
     setEntry({
-      title: '',
-      author: '',
-      url: '',
-      likes: ''
-    })
-  }
+      title: "",
+      author: "",
+      url: "",
+      likes: "",
+    });
+  };
 
-  return(
+  return (
     <form onSubmit={create}>
-      <div >
-        <div >
-                    Title
-          <input style={{ margin: 8 }}
+      <div>
+        <div>
+          Title
+          <input
+            style={{ margin: 8 }}
             value={entry.title}
             onChange={handleTitle}
             data-testid="title-input"
           />
         </div>
-        <div >
-                    Author
-          <input style={{ margin: 8 }}
+        <div>
+          Author
+          <input
+            style={{ margin: 8 }}
             value={entry.author}
             onChange={handleAuthor}
             data-testid="author-input"
           />
         </div>
-        <div >
-                    Url
-          <input style={{ margin: 8 }}
+        <div>
+          Url
+          <input
+            style={{ margin: 8 }}
             value={entry.url}
             onChange={handleUrl}
             data-testid="url-input"
           />
         </div>
-        <div >
-                    Likes
-          <input style={{ margin: 8 }}
+        <div>
+          Likes
+          <input
+            style={{ margin: 8 }}
             value={entry.likes}
             onChange={handleLikes}
             data-testid="likes-input"
           />
         </div>
-        <button type="submit">Add blog</button>
+        <Button variant="primary" type="submit">
+          Add blog
+        </Button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default BlogForm
+export default BlogForm;

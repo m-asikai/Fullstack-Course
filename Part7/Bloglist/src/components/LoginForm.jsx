@@ -1,31 +1,30 @@
-const LoginForm = ({
-  handleLogin,
-  username,
-  password,
-  handleUsername,
-  handlePassword,
-}) => {
+import { Button, Form } from "react-bootstrap";
+
+const LoginForm = ({ handleLogin, handleUsername, handlePassword }) => {
+  const style = { padding: 8 };
   return (
-    <form onSubmit={handleLogin} data-testid="login-form">
-      <div>
-        Username
-        <input
-          style={{ margin: 8 }}
-          value={username}
-          onChange={handleUsername}
-        />
-      </div>
-      <div>
-        Password
-        <input
-          style={{ margin: 8 }}
-          value={password}
-          onChange={handlePassword}
+    <Form onSubmit={handleLogin} style={{ width: "50%", margin: "auto" }}>
+      <Form.Group controlId="loginFormUsername" style={style}>
+        <Form.Control placeholder="Username" onChange={handleUsername} />
+      </Form.Group>
+      <Form.Group controlId="loginFormPassword" style={style}>
+        <Form.Control
+          placeholder="Password"
           type="password"
+          onChange={handlePassword}
         />
-      </div>
-      <button type="submit">Login</button>
-    </form>
+      </Form.Group>
+      <Button
+        variant="primary"
+        type="submit"
+        style={{
+          ...style,
+          borderRadius: 0,
+        }}
+      >
+        Login
+      </Button>
+    </Form>
   );
 };
 

@@ -99,8 +99,6 @@ const Home = () => {
       {!user && (
         <LoginForm
           handleLogin={handleLogin}
-          username={username}
-          password={password}
           handleUsername={handleUsername}
           handlePassword={handlePassword}
         />

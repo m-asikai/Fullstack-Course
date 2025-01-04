@@ -8,6 +8,7 @@ import UserList from "./components/UserList";
 import Home from "./components/Home";
 import SingleUserView from "./components/SingleUserView";
 import Blog from "./components/Blog";
+import { Button } from "react-bootstrap";
 
 const App = () => {
   const [users, setUsers] = useState([]);
@@ -41,18 +42,32 @@ const App = () => {
 
   return (
     <Router>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: "center" }} className="container">
         {user && (
           <div>
             <p>Logged in as {user.username}</p>
-            <button onClick={handleLogOut}>Logout</button>
+            <Button variant="danger" onClick={handleLogOut}>
+              Logout
+            </Button>
           </div>
         )}
         <div>
-          <Link to="/" style={{ padding: 4 }}>
+          <Link
+            to="/"
+            style={{
+              padding: 4,
+              textDecoration: "None",
+            }}
+          >
             Home
           </Link>
-          <Link to="/users" style={{ padding: 4 }}>
+          <Link
+            to="/users"
+            style={{
+              padding: 4,
+              textDecoration: "None",
+            }}
+          >
             Users
           </Link>
         </div>
