@@ -185,7 +185,7 @@ const resolvers = {
         const author = await Author.findOne({ name: args.author });
         return Book.find({ author: author._id });
       }
-      return Book.find({});
+      return Book.find({}).populate("author");
     },
     allAuthors: async () => {
       return Author.find({});
@@ -227,7 +227,8 @@ const resolvers = {
         genres: args.genres ? args.genres : null,
       });
       try {
-        book.save();
+        await book.save();
+        return book.populate("author");
       } catch (e) {
         throw new GraphQLError("Saving book failed", {
           extensions: {
@@ -236,7 +237,6 @@ const resolvers = {
           },
         });
       }
-      return book;
     },
     editAuthor: async (root, args, context) => {
       const user = context.currentUser;
@@ -275,6 +275,7 @@ const resolvers = {
       }
     },
     login: async (root, args) => {
+      console.log(args);
       const user = await User.findOne({ username: args.username });
       if (!user || args.password !== "secret") {
         throw new GraphQLError("Wrong credentials", {

@@ -2,25 +2,39 @@ import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { ADD_BOOK, ALL_BOOKS } from "../Utils/queries";
 
-const BookForm = () => {
+const BookForm = ({ show, token }) => {
   const [genres, setGenres] = useState([]);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState(null);
   const [genre, setGenre] = useState("");
 
+  // const [createBook] = useMutation(ADD_BOOK, {
+  //   refetchQueries: [{ query: ALL_BOOKS }],
+  // });
   const [createBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }],
+    update: (cache, res) => {
+      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(res.data.addBook),
+        };
+      });
+    },
   });
+
+  if (!token || !show) {
+    return null;
+  }
 
   const addBook = (e) => {
     e.preventDefault();
     createBook({ variables: { title, author, published, genres } });
     setGenres([]);
-    // setTitle("");
-    // setAuthor("");
-    // setPublished("");
-    // setGenre("");
+    setTitle("");
+    setAuthor("");
+    setPublished("");
+    setGenre("");
   };
 
   return (
@@ -46,9 +60,11 @@ const BookForm = () => {
           Add genre
         </button>
       </div>
-      <p>Genres: </p>
+      <p style={{ marginBottom: 0 }}>Genres: </p>
       {genres.join(", ")}
-      <button type="submit">Add book</button>
+      <div>
+        <button type="submit">Add book</button>
+      </div>
     </form>
   );
 };
