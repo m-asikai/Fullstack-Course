@@ -1,5 +1,5 @@
-import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../Utils/queries";
+import { useQuery, useSubscription } from "@apollo/client";
+import { ALL_BOOKS, BOOK_ADDED } from "../Utils/queries";
 import { useState, useEffect } from "react";
 
 const Books = (props) => {
@@ -7,6 +7,12 @@ const Books = (props) => {
   const [books, setBooks] = useState([]);
   const { loading, data, refetch } = useQuery(ALL_BOOKS, {
     variables: { genre: filter },
+  });
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      setBooks(books.concat(data.data.bookAdded));
+    },
   });
 
   useEffect(() => {
@@ -52,8 +58,9 @@ const Books = (props) => {
       <table>
         <tbody>
           <tr>
-            <th>author</th>
-            <th>published</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Published</th>
           </tr>
           {books.map((a) => (
             <tr key={a.title}>

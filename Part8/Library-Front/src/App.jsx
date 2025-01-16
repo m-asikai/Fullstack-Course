@@ -3,9 +3,25 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import BookForm from "./components/BookForm";
 import Login from "./components/Login";
-import { useApolloClient, useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "./Utils/queries";
+import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
+import { ALL_BOOKS, BOOK_ADDED } from "./Utils/queries";
 import Favourites from "./components/Favourites";
+
+export const updateCache = (cache, query, bookAdded) => {
+  const uniqueByName = (n) => {
+    const seen = new Set();
+    return n.filter((item) => {
+      let k = item.title;
+      return seen.has(k) ? false : seen.add(k);
+    });
+  };
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqueByName(allBooks.concat(bookAdded)),
+    };
+  });
+};
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -13,6 +29,15 @@ const App = () => {
   const res = useQuery(ALL_BOOKS);
   const [books, setBooks] = useState([]);
   const client = useApolloClient();
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded;
+      window.alert(`${addedBook.title} added to the database.`);
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
+    },
+    onError: (e) => console.log(e),
+  });
 
   useEffect(() => {
     const savedToken = localStorage.getItem("book-token");
